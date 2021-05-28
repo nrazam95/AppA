@@ -17,7 +17,7 @@ class Board
     self.new(tiles)
   end
 
-  def initialize(grid = self.class.empty_grid)
+  def initialize(grid = self.from_file(filename))
     @grid = grid
   end
 
