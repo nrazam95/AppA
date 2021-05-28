@@ -17,18 +17,18 @@ class Board
     self.new(tiles)
   end
 
-  def initialize(grid = self.class.empty_grid)
+  def initialize(grid = self.from_file(filename))
     @grid = grid
   end
 
   def [](pos)
-    x, y = pos
-    grid[x][y]
+    row, col = pos
+    grid[row][col]
   end
 
   def []=(pos, value)
-    x, y = pos
-    tile = grid[x][y]
+    row, col = pos
+    tile = grid[row][col]
     tile.value = value
   end
 
@@ -37,7 +37,7 @@ class Board
   end
 
   def render
-    puts "  #{(0..8).to_a.join(" ")}"
+    puts " #{(0..8).to_a.join(" ")}"
     grid.each_with_index do |row, i|
       puts "#{i} #{row.join(" ")}"
     end
