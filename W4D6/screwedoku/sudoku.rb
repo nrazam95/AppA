@@ -17,10 +17,6 @@ class SudokuGame
       puts "Please enter a position on the board (e.g., '3,4')"
       print "> "
       pos = parse_pos(gets.chomp)
-      puts "Invalid position entered (did you use a comma?)"
-      puts ""
-      
-      pos = nil
     end
     pos
   end
