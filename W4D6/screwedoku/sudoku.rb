@@ -72,7 +72,7 @@ class SudokuGame
 end
 
 if __FILE__ == $PROGRAM_NAME
-  file = "puzzles/sudoku1.txt"
-  game = SudokuGame.new(Board.new(file))
+  file = "../screwedoku/puzzles/sudoku1.txt"
+  game = SudokuGame.from_file(file)
   game.run
 end
