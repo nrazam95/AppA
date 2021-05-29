@@ -60,9 +60,9 @@ class Tile
 
     def inspect
         { pos: pos,
-            bombed: bombed?
-            flagged: flagged?
-            explored: explored?}.inspect
+            bombed: bombed?,
+            flagged: flagged?,
+            explored: explored? }.inspect
     end
 
     def plant_bomb
