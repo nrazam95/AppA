@@ -46,7 +46,6 @@ class MinesweeperGame
     when "e"
       tile.explore
     when "s"
-      # won't quit on save, just hit ctr-c to do that.
       save
     end
   end
@@ -60,7 +59,6 @@ class MinesweeperGame
 end
 
 if $PROGRAM_NAME == __FILE__
-  # running as script
 
   case ARGV.count
   when 0
