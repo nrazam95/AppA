@@ -16,7 +16,17 @@ class Tile
         @bombed, @explore, @flagged = false, false, false
     end
 
+    def bombed?
+        @bombed
+    end
+    
+    def explored?
+        @explored
+    end
+    
+    def flagged?
+        @flagged
+    end
     
     
-
 end
