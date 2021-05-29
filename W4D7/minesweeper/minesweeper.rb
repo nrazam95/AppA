@@ -64,7 +64,6 @@ if $PROGRAM_NAME == __FILE__
   when 0
     MinesweeperGame.new(:small).play
   when 1
-    # resume game, using first argument
     YAML.load_file(ARGV.shift).play
   end
 end
