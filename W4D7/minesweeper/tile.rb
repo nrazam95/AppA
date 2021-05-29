@@ -44,6 +44,40 @@ class Tile
         neighbours.select(&:bombed?).count
     end
 
+    def explore
+        return self if flagged?
+        return self if explored?
+
+        @explored = true
+        if !bombed? && adjacent_bomb_count == 0
+            neighbours.each(&:explore)
+        end
+
+        self
+    end
+
+    def inspect
+        { pos: pos,
+            bombed: bombed?
+            flagged: flagged?
+            explored: explored?}.inspect
+    end
+
+    def plant_bomb
+        @bombed = true
+    end
+    
+    def render
+        if flagged?
+            "F"
+        elsif explored?
+            adjacent_bomb_count == 0 ? "_" : adjacent_bomb_count.to_s
+        else
+            "*"
+        end
+    end
+    
+    
     
     
 end
