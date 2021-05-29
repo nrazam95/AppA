@@ -77,7 +77,17 @@ class Tile
         end
     end
     
-    
-    
-    
+    def reveal
+        if flagged?
+            bombed? ? "F" : "f"
+        elsif bombed?
+            explroed? ? "X" : "B"
+        else
+            adjacent_bomb_count == 0 ? "_" : adjacent_bomb_count.to_s
+        end
+    end
+
+    def toggle_flag
+        @flagged = !@flagged unless @explored
+    end
 end
