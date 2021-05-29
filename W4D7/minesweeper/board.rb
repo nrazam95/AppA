@@ -50,12 +50,12 @@ class Board
 
         while total_bombs < @num_bombs
             rand_pos = Array.new(2) { rand(@grid_size)}
-            
+
             tile = self[rand_pos]
             next if tile.bombed?
             
             tile.plant_bomb
-            total_bomb += 1
+            total_bombs += 1
         end
 
         nil
