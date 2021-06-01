@@ -1,6 +1,6 @@
 require 'rspec'
-require_relative 'board.rb'
-require_relative 'spec_helper.rb'
+require 'board'
+require 'spec_helper'
 
 describe Board do
   subject(:board) do
