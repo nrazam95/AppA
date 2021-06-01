@@ -71,7 +71,7 @@ class Board
     if player1_count == player2_count
       :draw
     else
-      player1_count > player2_count ? @name1 :; @name2
+      player1_count > player2_count ? @name1 : @name2
     end
   end
 end
