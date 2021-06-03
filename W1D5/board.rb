@@ -1,4 +1,4 @@
-#Phase 1
+require_relative 'pieces'
 
 class Board
     attr_reader :rows
