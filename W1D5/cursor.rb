@@ -41,7 +41,7 @@ class Cursor
   end
 
   def toggle_selected
-      @selected = !@selected
+    @selected = !@selected
   end
 
   def get_input
@@ -52,36 +52,32 @@ class Cursor
   private
 
   def handle_key(key)
-      case key
-      when :ctrl_c
-        exit 0
-      when :return, :space
-        toggle_selected
-        cursor_pos
-      when :left, :right, :up, :down
-        update_pos(MOVES[key])
-      else
-        puts key
-      end
+    case key
+    when :ctrl_c
+      exit 0
+    when :return, :space
+      toggle_selected
+      cursor_pos
+    when :left, :right, :up, :down
+      update_pos(MOVES[key])
+      nil
+    else
+      puts key
+    end
   end
-  
 
   def read_char
     STDIN.echo = false
-
     STDIN.raw!
 
-
-    input = STDIN.getc.chr 
-
+    input = STDIN.getc.chr
     if input == "\e"
-      input << STDIN.read_nonblock(3) rescue nil 
-
+      input << STDIN.read_nonblock(3) rescue nil
       input << STDIN.read_nonblock(2) rescue nil
     end
 
-    STDIN.echo = true 
-    STDIN.cooked! 
+    STDIN.echo = true
+    STDIN.cooked!
 
     input
   end
