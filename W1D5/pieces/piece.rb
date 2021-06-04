@@ -16,7 +16,7 @@ class Piece
     end
     
     def symbol
-        raise NoErrorImplemented
+        raise NotImplementedError
     end
     
     def valid_moves

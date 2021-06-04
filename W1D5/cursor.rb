@@ -83,7 +83,7 @@ class Cursor
     STDIN.echo = true 
     STDIN.cooked! 
 
-    return input
+    input
   end
 
   def update_pos(diff)
