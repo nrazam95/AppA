@@ -60,6 +60,7 @@ module PokerHands
   end
 
   private
+  
   def royal_flush?
     royal? && straight_flush?
   end
