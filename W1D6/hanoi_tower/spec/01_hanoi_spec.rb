@@ -1,7 +1,7 @@
 require '01_hanoi'
 
 describe TowersOfHanoiGame do
-    subject(:towers) { TowersOfHanoiGame.new}
+    subject(:towers) { TowersOfHanoiGame.new }
 
     describe "#render" do
         it "pretty-prints stacks" do
