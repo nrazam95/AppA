@@ -1,110 +1,94 @@
-require_relative './tie_breaker'
-
-module PokerHands
-  include TieBreaker
-
-  RANKS = [
-    :royal_flush,
-    :straight_flush,
-    :four_of_a_kind,
-    :full_house,
-    :flush,
-    :straight,
-    :three_of_a_kind,
-    :two_pair,
-    :one_pair,
-    :high_card
-  ]
-
-  def rank
-    RANKS.each do |rank|
-      return rank if self.send("#{rank}?")
+module TieBreaker
+  def tie_breaker(other_hand)
+    case rank
+    when :royal_flush, :straight_flush, :straight, :flush, :high_card
+      high_card <=> other_hand.high_card
+    when :four_of_a_kind
+      compare_set_then_high_card(4, other_hand)
+    when :three_of_a_kind
+      compare_set_then_high_card(3, other_hand)
+    when :one_pair
+      compare_set_then_high_card(2, other_hand)
+    when :two_pair
+      compare_two_pair(other_hand)
+    when :full_house
+      compare_full_house(other_hand)
     end
   end
 
-  def <=>(other_hand)
-    if self == other_hand
-      0
-    elsif rank != other_hand.rank
-      RANKS.reverse.index(rank) <=> RANKS.reverse.index(other_hand.rank)
+  def compare_full_house(other_hand)
+    three = set_card(3) <=> other_hand.set_card(3)
+    if three == 0
+      two = set_card(2) <=> other_hand.set_card(2)
+      if two == 0
+        high_card = cards_without(set_card(3).value) &
+                    cards_without(set_card(2).value)
+        other_high_card = other_hand.cards_without(set_card(3).value) &
+                          other_hand.cards_without(set_card(2).value)
+        high_card <=> other_high_card
+      else
+        two
+      end
     else
-      tie_breaker(other_hand)
+      three
+    end
+  end
+
+  def compare_two_pair(other_hand)
+    high = high_pair[0] <=> other_hand.high_pair[0]
+    if high == 0
+      low = low_pair[0] <=> other_hand.low_pair[0]
+      if low == 0
+        high_card = cards.find do |card|
+          card_value_count(card.value) != 2
+        end
+        other_high_card = other_hand.cards.find do |card|
+          other_hand.card_value_count(card.value) != 2
+        end
+
+        high_card <=> other_high_card
+      else
+        low
+      end
+    else
+      high
+    end
+  end
+
+  def high_pair
+    if pairs[1][0] < pairs[0][0]
+      pairs[0]
+    else
+      pairs[1]
+    end
+  end
+
+  def low_pair
+    if pairs[0][0] < pairs[1][0]
+      pairs[0]
+    else
+      pairs[1]
+    end
+  end
+
+  def compare_set_then_high_card(n, other_hand)
+    set_card, other_set_card = set_card(n), other_hand.set_card(n)
+    if set_card == other_set_card
+      cards_without(set_card.value).last <=>
+      other_hand.cards_without(set_card.value).last
+    else
+      set_card <=> other_set_card
     end
   end
 
   protected
-  def card_value_count(value)
-    @cards.map(&:value).count(value)
-  end
-
-  def high_card
-    @cards.sort.last
-  end
-
-  def cards_without(value)
-    @cards.select { |card| card.value != value }
-  end
-
-  def has_a?(value_or_suit)
-    @cards.any? do |card|
-      card.value == value_or_suit || card.suit == value_or_suit
+  def pairs
+    pairs = []
+    @cards.map(&:value).uniq.each do |value|
+      if card_value_count(value) == 2
+        pairs << @cards.select { |card| card.value == value }
+      end
     end
-  end
-
-  def royal?
-    Card.royal_values.all? { |value| @cards.map(&:value).include?(value) }
-  end
-
-  def set_card(n)
-    cards.find { |card| card_value_count(card.value) == n }
-  end
-
-  private
-  
-  def royal_flush?
-    royal? && straight_flush?
-  end
-
-  def straight_flush?
-    straight? && flush?
-  end
-
-  def four_of_a_kind?
-    @cards.any? { |card| card_value_count(card.value) == 4 }
-  end
-
-  def full_house?
-    three_of_a_kind? && one_pair?
-  end
-
-  def flush?
-    @cards.map(&:suit).uniq.length == 1
-  end
-
-  def straight?
-    if has_a?(:ace) && has_a?(:two)
-      straight = Card.values[0..3] + [:ace]
-    else
-      low_index = Card.values.index(@cards.first.value)
-      straight = Card.values[low_index..(low_index + 4)]
-    end
-
-    @cards.map(&:value) == straight
-  end
-
-  def three_of_a_kind?
-    @cards.any? { |card| card_value_count(card.value) == 3 }
-  end
-
-  def two_pair?
-    pairs.count == 2
-  end
-
-  def one_pair?
-    pairs.count == 1
-  end
-
-  def high_card?
-    true
+    pairs
   end
 end
